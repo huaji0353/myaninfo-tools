@@ -26,7 +26,6 @@ class BgmtvSpider(scrapy.Spider):
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
-
     def parse(self, response):
 
         if response.xpath(
@@ -48,7 +47,5 @@ class BgmtvSpider(scrapy.Spider):
             url.split("/")[-1]
             for url in response.xpath(
                 '//li[@class="clearit"]/a[@class="avatar thumbTip"]/@href').extract()]
-        item['tagdata'] = response.xpath('//ul[@id="infobox"]/li').extract() 
+        item['tagdata'] = response.xpath('//ul[@id="infobox"]/li').extract()
         yield item
-
-
