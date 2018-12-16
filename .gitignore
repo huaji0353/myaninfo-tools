@@ -1,1 +1,27 @@
+# cache file
 __pycache__
+
+
+# ctags
+tags
+
+# conf
+config.py
+.pylintrc
+
+# coverall
+.coverage
+coverage.xml
+
+# rope
+.ropeproject
+
+# test
+test/
+
+# git
+.gitignore
+
+# Docker
+.env
+
