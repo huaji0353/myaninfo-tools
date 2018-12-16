@@ -10,10 +10,10 @@ import scrapy
 
 class BgmtvItem(scrapy.Item):
     # define the fields for your item here like:
-#    sale_day = scrapy.Field()
-#    isbn = scrapy.Field()
-#    author = scrapy.Field()
-#    Publish = scrapy.Field()
+    #    sale_day = scrapy.Field()
+    #    isbn = scrapy.Field()
+    #    author = scrapy.Field()
+    #    Publish = scrapy.Field()
     tagdata = scrapy.Field()
     desc = scrapy.Field()
     rank = scrapy.Field()
@@ -22,4 +22,3 @@ class BgmtvItem(scrapy.Item):
     like = scrapy.Field()
     cover = scrapy.Field()
     title = scrapy.Field()
-
