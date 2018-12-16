@@ -1,23 +1,30 @@
 # myaninfo-tools
 myaninfo database and site static build tools
 
-番站数据库建立与静态网站生成工具
+番站数据库建立与静态网站生成工具 coding with love
 
 
 ## getstart 开始
-从b站和番组计划爬取所需数据，储存优化并整合 - gendb.py
+从 bgmtv 豆瓣 anime-planet 爬取所需数据，储存优化并整合 - /gendb
+
+动态前端 - /www
+
+静态网站生成 - /gensite
+
+## technical parameters 技术参数
+爬虫+后端 使用scrapy/使用python队列+多道 使用mongodb/sqllite3（未确定）
+
+前端 使用reactjs+material-ui/简易bs4模版（未确定）
 
 ## docs 文档介绍
-("https://bgm.tv/subject/135275", bangumi_subject_parser)
-
-geturl(stack) -> httpget(url) -io> xxx_xxx_parser(rawpage) -> sqlexec() -io> pop(stack)
+TODO....
 
 ## logs 日志
-* 2018-10-08 制定初始数据格式
-
-* 2018-11-30 重启项目
+* 2018-12-16 @blue bird1 加入开发
 
 * 2018-12-08 subject的parser进度40%
+
+* 2018-10-08 制定初始数据格式
 
 ## ref 手册
 [类似的问题](https://bbs.saraba1st.com/2b/thread-1344972-1-1.html)
