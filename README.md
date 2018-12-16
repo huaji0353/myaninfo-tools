@@ -1,5 +1,5 @@
 # myaninfo-tools
-myaninfo database and site static build tools
+myaninfo database and site build tools
 
 番站数据库建立与静态网站生成工具 coding with love
 
@@ -15,9 +15,7 @@ pip install scrapy mongoengine
 ## docs 文档介绍
 从 bgmtv 豆瓣 anime-planet 爬取所需数据，储存优化并整合 - /gendb
 
-动态前端 - /www
-
-静态网站生成 - /gensite
+动态前端 - /web
 
 ## logs 日志
 * 2018-12-16 @blue bird1 加入开发
