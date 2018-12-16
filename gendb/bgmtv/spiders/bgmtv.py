@@ -6,15 +6,16 @@ bgmtv scrapy
 import scrapy
 from bgmtv.items import BgmtvItem
 
+from urllib.parse import urlparse
+from multiprocessing import Process, Queue
 
 class BgmtvSpider(scrapy.Spider):
     name = "bgmtv"
 
     allowed_domains = ['bgm.tv']
 
-
     start_id = 1
-    end_id = 2600
+    end_id = 5
 
     url = "http://bgm.tv/subject/"
 

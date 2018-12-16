@@ -5,19 +5,19 @@ myaninfo database and site static build tools
 
 
 ## getstart 开始
+pip install scrapy mongoengine
+
+## technical parameters 技术参数
+爬虫+后端 使用scrapy+python队列与多道 使用mongodb（未确定）
+
+前端 使用reactjs+material-ui/简易bs4模版（未确定）
+
+## docs 文档介绍
 从 bgmtv 豆瓣 anime-planet 爬取所需数据，储存优化并整合 - /gendb
 
 动态前端 - /www
 
 静态网站生成 - /gensite
-
-## technical parameters 技术参数
-爬虫+后端 使用scrapy/使用python队列+多道 使用mongodb/sqllite3（未确定）
-
-前端 使用reactjs+material-ui/简易bs4模版（未确定）
-
-## docs 文档介绍
-TODO....
 
 ## logs 日志
 * 2018-12-16 @blue bird1 加入开发
