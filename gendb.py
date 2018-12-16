@@ -1,37 +1,68 @@
-# coding:utf-8
-bgmsinfo = {
-	# 番剧信息数据格式 v0.0.1a
-	'name' : '野良与皇女与流浪猫之心' , # 名字
-	'cover' : 'http://dudulu-1253306719.file.myqcloud.com/bangumi/d1baea72480886a0730bac63e657e447.jpg' , # 封面 url
-	'timearg' : [2017, 07], # 放送时间(yy/mm)
-	'intro' : '住在湾岸城镇樱渊市的少年反田野良，在某个春日的上学途中，看到了一位美少女。这位名叫帕特莉西亚的少女乃是冥界的皇女，为了将野良等人所居住的地上生物灭绝而来。当天中午，野良由于某起事件而与帕特莉西亚接吻了。紧接着，野良的身体就变成了一只黑猫。由于帕特莉西亚所拥有的魔力，野良成为了她的眷属。数日后，野良终于可以变回人类的样子，但在那之后他又几次重复变成猫和恢复人形的过程。', # 简介
-	'tags' : #标签
-	{
-		'genre' : ['gal改', '泡面番', '日常搞笑', '萌系', 'PPT'], # 类型
-		'staff' : [], # 制作组 包括cv与制作公司
-		'feature' : ['奇幻设定'], # 特点
-	},
-	'relate' : #相关
-	{
-		'chara' : ['帕特莉西亚'], # 角色
-		'bgm' : None, # 音乐
-		'+series' : None, # 系列
-		'+recom' : [], # 推荐
-	},
-}
+# -*- coding:utf-8 -*-
+from multiprocessing import Process, Queue
+import threading, time
 
-charasinfo = {
-	# 角色信息数据格式 v0.0.1a
-	'name' : '帕特莉西亚' , # 名字
-	'picture' : 'http://dudulu-1253306719.file.myqcloud.com/bangumi/d1baea72480886a0730bac63e657e447.jpg' , # 原画url
-	'tags' : #标签
-	{
-		'cv' : '高森奈津美', # 声优
-		'feature' : ['双马尾', '女王', '吊带袜', '黑丝', 'JK', '异世界人'], # 突出特点
-	},
-	'relate' : #相关
-	{
-		'series' : ['野良与皇女与流浪猫之心'], # 系列
-		'+chara' : None, # 相关角色
-	},
-}
+import requests
+import sqlite3
+
+PROCESS_MAX = 16
+QUEUE_MAX = 200
+retry_count = 5
+
+ON = True
+proxy == None
+
+def unit_getpage(url_queue, page_queue):
+	'''从url队列拉取->用代理请求页面内容->放入页面队列'''
+	# Process(target=, args=()).start() < PROCESS_MAX
+	while ON:
+		if url_queue.empty():
+			time.sleep(1)
+			print("[waiting] <url> queue is empty")
+		else:
+			url = url_queue.get()
+			if proxy == None:
+				proxy = requests.get("http://123.207.35.36:5010/get/").content
+			while 1:
+				try:
+					html = requests.get(url, proxies={"http": "http://%s"%proxy}).content
+					page_queue.put((html, url))
+					break
+				except Exception:
+					if retry_count > 0:
+						proxy = None
+						break
+					retry_count -= 1
+
+def unit_parser(page_queue, url_queue, data_queue):
+	'''拉取页面队列->分选项解析页面->写回数据/url队列'''
+	while ON:
+		if page_queue.empty():
+			time.sleep(1)
+			print("[waiting] <page> queue is empty")
+		else:
+			page_with_url = page_queue.get()
+			runparser(page_with_url, url_queue, data_queue)
+
+def unit_writedb(data_queue):
+	'''拉取数据->序列化/写数据库'''
+	while ON:
+		if data_queue.empty():
+			time.sleep(1)
+			print("[waiting] <data> queue is empty")
+		else:
+			data = data_queue.get()
+			print("sql_mode")
+
+if __name__ == '__main__':
+	url_queue = Queue()
+	page_queue = Queue()
+	data_queue = Queue()
+
+	url_queue.put("https://bgm.tv/")
+	
+	for i in range(0, PROCESS_MAX):
+		Process(target=unit_getpage, args=(url_queue, page_queue)).start()
+	threading.Thread(target=unit_parser, args=(page_queue, url_queue, data_queue)).start()
+	threading.Thread(target=unit_writedb, args=(data_queue)).start()
+	
