@@ -8,7 +8,7 @@ myaninfo database and site build tools
 pip install scrapy mongoengine
 
 ## technical parameters 技术参数
-爬虫+后端 使用scrapy+python队列与多道 使用mongodb（未确定）
+爬虫+后端 使用scrapy+python队列与多道 使用mongodb
 
 前端 使用reactjs+material-ui/简易bs4模版（未确定）
 
