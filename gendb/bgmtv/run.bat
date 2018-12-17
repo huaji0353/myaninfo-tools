@@ -1,1 +1,1 @@
-scrapy crawl bgmtv -o quotes.json -t json
+scrapy crawl bgmtv -o bgmtv.json -t json
