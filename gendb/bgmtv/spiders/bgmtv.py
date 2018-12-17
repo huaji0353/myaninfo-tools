@@ -1,32 +1,52 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# https://www.cnblogs.com/coder2012/p/4990834.html yield是个啥？
 """
 bgmtv scrapy
 """
 import scrapy
-from . import parser_unit
-
-from multiprocessing import Process, Queue
+from bgmtv.items import AnimeItem, CharaItem
 
 class BgmtvSpider(scrapy.Spider):
     name = "bgmtv"
-    allowed_domains = ['bgm.tv']
+    domain = "https://bgm.tv"
 
-    start_urls = "https://bgm.tv/anime/browser/airtime/1990-1"
+    index_url = "https://bgm.tv/anime/browser/airtime/%s-%s"
+    index_start_year = 1990
+    index_start_month = 1
+    
+    index_end_year = 1990
+    index_end_month = 2
 
+    def _get_index_url(self):
+        url = index_url.format(self.year, self.month)
+        if self.month > 12:
+            self.year = self.year + 1
+            self.month = 1
+        else:
+            self.month = self.month + 1
+        return url
+        
     def start_requests(self):
-        self.url_queue = Queue()
-        self.url_queue.put("https://bgm.tv/anime/browser/airtime/1990-1")
-        while 1:
-            url = self.url_queue.get()
-            yield scrapy.Request(url=url, callback=self.parse)
+        self.year = index_start_year
+        self.month = index_start_month
+        yield scrapy.Request(url=_get_index_url(), callback=self.parse_index_numpage)
 
-    def parse(self, response):
-        ''' 通过传入访问地址，获取对应的功能函数 '''
-        url = response.url
-        urldir = '/'.join(url.strip().split('/')[:-1])+"/"
-        try:
-            parser = parser_unit.url_router_dict[urldir] # 路由表升级TODO
-            yield parser(self, response.text)
-        except KeyError:
-             pass
+    def parse_index_numpage(self, response):
+        if '››' in response.xpath('//a[contains(@class,"p")]/text()').extract(): # 存在下一页
+            yield scrapy.Request(url=, callback=self.parse_index_numpage)
+        else:
+            yield scrapy.Request(url=_get_index_url(), callback=self.parse_index_numpage)
+        
+    def parse_index(self, response):
+        hrefs = response.xpath('//a[contains(@class,"subjectCover")]/@href').extract()
+        for href in hrefs:
+            yield scrapy.Request(url=domain+href, callback=self.parse_subject)
+                
+    def parse_subject(self, response):
+        item = BgmtvItem()
+        yield item
+
+    def parse_character(self, response):
+        pass
+        
