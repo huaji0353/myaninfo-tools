@@ -4,48 +4,29 @@
 bgmtv scrapy
 """
 import scrapy
-from bgmtv.items import BgmtvItem
+from . import parser_unit
 
-from urllib.parse import urlparse
 from multiprocessing import Process, Queue
 
 class BgmtvSpider(scrapy.Spider):
     name = "bgmtv"
-
     allowed_domains = ['bgm.tv']
 
-    start_id = 1
-    end_id = 5
-
-    url = "http://bgm.tv/subject/"
+    start_urls = "https://bgm.tv/anime/browser/airtime/1990-1"
 
     def start_requests(self):
-        urls = [
-            self.url+str(url_id) for url_id in range(self.start_id, self.end_id)
-        ]
-        for url in urls:
+        self.url_queue = Queue()
+        self.url_queue.put("https://bgm.tv/anime/browser/airtime/1990-1")
+        while 1:
+            url = self.url_queue.get()
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
-
-        if response.xpath(
-                '//title/text()').extract_first().split("|")[0] == "坟场":
-            return self.gen_url(response)
-        item = BgmtvItem()
-        item['desc'] = "".join(
-            response.xpath('//div[@id="subject_summary"]/text()').extract())
-        item['title'] = response.xpath(
-            '//title/text()').extract_first().split("|")[0]
-        item['tag'] = response.xpath(
-            '//div[@class="inner"]/a[@class="l"]/span/text()').extract()
-        item['rank'] = response.xpath(
-            '//span[@property="v:average"]/text()').extract_first()
-        item['comment'] = response.xpath(
-            '//div[@class="text_main_even"]/div/p/text()').extract()
-        item['cover'] = response.xpath('//img[@class="cover"]/@src').extract()
-        item['like'] = [
-            url.split("/")[-1]
-            for url in response.xpath(
-                '//li[@class="clearit"]/a[@class="avatar thumbTip"]/@href').extract()]
-        item['tagdata'] = response.xpath('//ul[@id="infobox"]/li').extract()
-        yield item
+        ''' 通过传入访问地址，获取对应的功能函数 '''
+        url = response.url
+        urldir = '/'.join(url.strip().split('/')[:-1])+"/"
+        try:
+            parser = parser_unit.url_router_dict[urldir] # 路由表升级TODO
+            yield parser(self, response.text)
+        except KeyError:
+             pass

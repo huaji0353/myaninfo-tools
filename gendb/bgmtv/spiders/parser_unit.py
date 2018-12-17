@@ -1,11 +1,30 @@
 # -*- coding:utf-8 -*-
+# https://www.cnblogs.com/ywk-1994/p/9543360.html
 # https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html
 from bs4 import BeautifulSoup
-import dataformat
+import bgmtv.dataformat as dataformat # item的导入 TODO
 import copy
 
+# 实现一个空路由表，利用装饰器将url和功能函数的对应关系自动存到这个字典中
+url_router_dict = {}
 
-def bangumi_subject_parser(subject_page):
+# 定义一个装饰器
+# 再给一层函数定义，用来传入一个参数,这个参数就是访问的页面地址
+# @decorator  # index = decorator(index)
+def url_router_wrap(url):
+    def decorator(parser):
+        def wrapper(*args, **kwargs):
+            parser(*args, **kwargs)
+        url_router_dict[url] = wrapper  # 既可以是parser也可以是wrapper,单如果是parser,就无法添加wrapper中的新功能
+        return wrapper
+    return decorator
+
+@url_router_wrap('https://bgm.tv/anime/browser/airtime/')
+def bgmtv_index(Spider, index_page):
+    return {'test':1}
+
+@url_router_wrap('https://bgm.tv/subject/')
+def bgmtv_subject(Spider, subject_page):
     '''bs4解析页面，提取内容，填充字典，返回字典'''
     soup = BeautifulSoup(subject_page, 'lxml')
 
@@ -55,9 +74,3 @@ def bangumi_subject_parser(subject_page):
         pass
 
     return subject_data
-
-
-if __name__ == '__main__':
-    with open('6007.html', 'rb') as f:
-        dic = bangumi_subject_parser(f.read())
-    0/0

@@ -1,16 +1,16 @@
 # myaninfo-tools
 myaninfo database and site build tools
 
-番站数据库建立与静态网站生成工具 coding with love
+动画番剧数据库与简易前端 coding with love
 
 
 ## getstart 开始
 pip install scrapy mongoengine
 
 ## technical parameters 技术参数
-爬虫+后端 使用scrapy+python队列与多道 使用mongodb
+爬虫+后端 使用scrapy+python队列与多道 数据库采用mongodb(json)
 
-前端 使用reactjs+material-ui/简易bs4模版（未确定）
+简易前端 使用reactjs+material-ui or 简易bs4模版（未确定）
 
 ## docs 文档介绍
 从 bgmtv 豆瓣 anime-planet 爬取所需数据，储存优化并整合 - /gendb

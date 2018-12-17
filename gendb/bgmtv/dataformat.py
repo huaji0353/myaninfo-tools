@@ -1,5 +1,6 @@
 # coding:utf-8
-
+from .items import BgmtvItem
+# TODOTDO
 anime_base = {
     "name": {"zh": "", "jp": "", "nhg": "", "en": ""},  # 名字 中文 日语 罗马音 英语
     "cover": None,  # 封面(base64/blob/url)
