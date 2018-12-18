@@ -5,19 +5,21 @@ myaninfo database and site build tools
 
 
 ## getstart 开始
-pip install scrapy mongoengine
+使用 Pipfile 还原环境
 
 ## technical parameters 技术参数
-爬虫+后端 使用scrapy+python队列与多道 数据库采用mongodb(json)
+爬虫+后端 使用scrapy yield生成器模拟队列 数据库采用mongodb(mongoengine)
 
-简易前端 使用reactjs+material-ui or 简易bs4模版（未确定）
+简易前端 使用Reactjs + material-ui
 
 ## docs 文档介绍
 从 bgmtv 豆瓣 anime-planet 爬取所需数据，储存优化并整合 - /gendb
 
-动态前端 - /web
+动态前端 可管理数据库 并进行数据可视化 - /web
 
 ## logs 日志
+* 2018-12-18 完成爬虫系统demo1
+
 * 2018-12-16 @blue bird1 加入开发
 
 * 2018-12-08 subject的parser进度40%
@@ -29,7 +31,7 @@ pip install scrapy mongoengine
 
 [使用微软OA做数据库](https://zhuanlan.zhihu.com/p/23331725)
 
-[爬虫1](https://github.com/AllenTom/BangumiSpider)
+[类似的轮子](https://github.com/AllenTom/BangumiSpider)
 
 ## fun 有趣的网站
 bgmtv mal anidb 等知名网站不在其中

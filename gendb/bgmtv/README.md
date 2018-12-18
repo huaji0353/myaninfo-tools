@@ -1,10 +1,13 @@
 # scrapy学习
 启动爬虫后从scrapy.Spider start_requests()或start_urls作为起始
 
-启动下载器进行Request
+从def parse(self, response): 生成实例 - 实例工厂
 
-def parse(self, response): 解析
+yield scrapy.Request(url, callback=self.some_parse)
 
-yield scrapy.Request(url, callback=self.some_parse) 将url放入队列
+yield scrapy.Item
 
-yield item 返回item
+# TODO
+把数据格式制定好，然后编写数据库代码
+
+编写更多的parser....更多....更多...
